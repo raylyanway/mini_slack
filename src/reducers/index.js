@@ -4,9 +4,9 @@ import { combineReducers } from 'redux';
 // import { reducer as formReducer } from 'redux-form';
 // import * as actions from '../actions';
 
-const channels = (state = {}, action) => state;
-const messages = (state = {}, action) => state;
-const currentChannelId = (state = {}, action) => state;
+const channels = (state = {}) => state;
+const messages = (state = {}) => state;
+const currentChannelId = (state = {}) => state;
 
 export default combineReducers({
   channels,
