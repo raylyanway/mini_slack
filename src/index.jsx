@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../assets/application.css';
+import '../assets/images/favicon.ico';
 import faker from 'faker';
 import gon from 'gon';
 import Cookies from 'js-cookie';
@@ -23,9 +24,6 @@ const devtoolMiddleware = ext && ext();
 /* eslint-enable */
 
 const initState = state => ({ ...state });
-
-/* eslint-disable no-console */
-console.log(initState(gon));
 
 let userName = Cookies.get('userName');
 
