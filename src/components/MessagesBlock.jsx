@@ -26,7 +26,6 @@ export default @UseMessages class MessagesBlock extends React.Component {
 
     const ulClasses = cn({
       'list-group': true,
-      'vh-80': true,
       'd-flex': true,
       'flex-column': true,
       'position-relative': true,
@@ -37,6 +36,7 @@ export default @UseMessages class MessagesBlock extends React.Component {
     };
 
     const ulStyle = {
+      maxHeight: '80vh',
       minHeight: '80vh',
     };
 
@@ -67,13 +67,14 @@ export default @UseMessages class MessagesBlock extends React.Component {
   render() {
     const divStyle = {
       maxHeight: '80vh',
+      minHeight: '80vh',
     };
 
     return (
       <div>
         <StayScrolled
           component="div"
-          className="overflow-auto min-vh-80"
+          className="overflow-auto"
           style={divStyle}
           provideControllers={this.storeScrolledControllers}
         >
