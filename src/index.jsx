@@ -4,24 +4,22 @@ import '../assets/images/favicon.ico';
 import faker from 'faker';
 import gon from 'gon';
 import Cookies from 'js-cookie';
-// import io from 'socket.io-client';
+import io from 'socket.io-client';
 import '@babel/polyfill';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import reducers from './reducers';
 import App from './components/App';
+import * as actions from './actions';
+import UserNameContext from './context';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
-
-/* eslint-disable no-underscore-dangle */
-const ext = window.__REDUX_DEVTOOLS_EXTENSION__;
-const devtoolMiddleware = ext && ext();
-/* eslint-enable */
 
 const initState = state => ({ ...state });
 
@@ -32,20 +30,20 @@ if (userName === undefined) {
   Cookies.set('userName', userName);
 }
 
-const UserNameContext = React.createContext(userName);
-
 const store = createStore(
   reducers,
   initState(gon),
-  compose(
-    applyMiddleware(thunk),
-    devtoolMiddleware,
-  ),
+  compose(composeWithDevTools(applyMiddleware(thunk))),
 );
+
+const socket = io();
+socket.on('newMessage', (res) => {
+  store.dispatch(actions.addMessageSuccess(res.data));
+});
 
 render(
   <Provider store={store}>
-    <UserNameContext.Provider>
+    <UserNameContext.Provider value={userName}>
       <App />
     </UserNameContext.Provider>
   </Provider>,
