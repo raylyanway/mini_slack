@@ -2,9 +2,10 @@ import React from 'react';
 import StayScrolled from 'react-stay-scrolled';
 import cn from 'classnames';
 import NewMessageForm from './NewMessageForm';
-import UseMessages from '../connects/messages';
+import { UseMessages } from '../connects';
 
-export default @UseMessages class MessagesBlock extends React.Component {
+@UseMessages
+class MessagesBlock extends React.Component {
   componentDidUpdate(prevProps) {
     const { messages } = this.props;
     if (prevProps.messages.length < messages.length) {
@@ -85,3 +86,5 @@ export default @UseMessages class MessagesBlock extends React.Component {
     );
   }
 }
+
+export default MessagesBlock;

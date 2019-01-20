@@ -13,6 +13,11 @@ export default (router, io) => {
     ],
     messages: [],
     currentChannelId: generalChannelId,
+    modal: {
+      modalShow: false,
+      body: '',
+      headerTitle: '',
+    },
   };
 
   const state = { ...defaultState };

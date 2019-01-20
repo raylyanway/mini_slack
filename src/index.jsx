@@ -40,6 +40,9 @@ const socket = io();
 socket.on('newMessage', (res) => {
   store.dispatch(actions.addMessageSuccess(res.data));
 });
+socket.on('newChannel', (res) => {
+  store.dispatch(actions.addChannelSuccess(res.data));
+});
 
 render(
   <Provider store={store}>

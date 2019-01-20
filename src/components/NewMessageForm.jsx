@@ -1,9 +1,13 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import UseCurrentChannelId from '../connects/currentChannelId';
 import UserNameContext from '../context';
+import { UseCurrentChannelId } from '../connects';
 
-@UseCurrentChannelId class NewMessageForm extends React.Component {
+@UseCurrentChannelId
+@reduxForm({
+  form: 'newMessage',
+})
+class NewMessageForm extends React.Component {
   static contextType = UserNameContext;
 
   constructor(props) {
@@ -17,23 +21,29 @@ import UserNameContext from '../context';
 
   createMessage = async ({ text }) => {
     const userName = this.context;
-    const { addMessage, reset, currentChannelId } = this.props;
+    const {
+      addMessage,
+      reset,
+      currentChannelId,
+      modalOpen,
+    } = this.props;
     const message = { currentChannelId, attributes: { text, userName } };
     try {
       await addMessage(message);
+      reset();
     } catch (e) {
+      modalOpen({
+        modalShow: true,
+        headerTitle: 'Error',
+        body: e.message,
+      });
+      // eslint-disable-next-line no-console
       console.log(e);
     }
-    reset();
   }
 
   render() {
     const { handleSubmit, submitting } = this.props;
-
-    const inputStyle = {
-      boxShadow: 'none',
-      border: '1px solid #ccc',
-    };
 
     return (
       <form className="form-inline" onSubmit={handleSubmit(this.createMessage)}>
@@ -47,9 +57,8 @@ import UserNameContext from '../context';
             ref={this.textInput}
             forwardRef
             autoFocus={!submitting}
-            className="form-control"
+            className="form-control shadow-none border-light"
             autoComplete="off"
-            style={inputStyle}
           />
           <div className="input-group-append">
             <button
@@ -66,6 +75,4 @@ import UserNameContext from '../context';
   }
 }
 
-export default reduxForm({
-  form: 'newMessage',
-})(NewMessageForm);
+export default NewMessageForm;

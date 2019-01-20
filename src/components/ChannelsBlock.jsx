@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
-import UseChannels from '../connects/channels';
-import UseCurrentChannelId from '../connects/currentChannelId';
+import NewChannelForm from './NewChannelForm';
+import { UseCurrentChannelId, UseChannels } from '../connects';
 
 @UseChannels
 @UseCurrentChannelId
@@ -45,7 +45,12 @@ class ChannelsBlock extends React.Component {
   }
 
   render() {
-    return this.renderChannels();
+    return (
+      <div>
+        <NewChannelForm />
+        {this.renderChannels()}
+      </div>
+    );
   }
 }
 
