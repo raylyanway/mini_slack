@@ -25,6 +25,9 @@ export const UseModal = connect(
   ({ modal }) => ({ modal }),
   {
     modalClose: actionCreators.modalClose,
+    modalOpen: actionCreators.modalOpen,
+    deleteChannel: actionCreators.deleteChannel,
+    editChannel: actionCreators.editChannel,
   },
 );
 

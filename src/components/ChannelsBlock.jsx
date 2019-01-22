@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NewChannelForm from './NewChannelForm';
 import { UseCurrentChannelId, UseChannels } from '../connects';
 
@@ -12,6 +13,20 @@ class ChannelsBlock extends React.Component {
     chooseChannel(id);
   }
 
+  editChannel = (id, name) => () => {
+    const { modalOpen } = this.props;
+    modalOpen({
+      modalShow: true,
+      headerTitle: 'Edit channel',
+      body: 'Edition',
+      footerDeleteButton: true,
+      footerTrueDeleteButton: false,
+      footerEditButton: true,
+      channelId: id,
+      channelName: name,
+    });
+  }
+
   renderChannels() {
     const { channels, currentChannelId } = this.props;
 
@@ -21,8 +36,10 @@ class ChannelsBlock extends React.Component {
 
     return (
       <div className="list-group">
-        {channels.map(({ id, name }) => {
+        {channels.map(({ id, name, removable }) => {
           const aClasses = cn({
+            'd-flex': true,
+            'flex-row': true,
             'list-group-item': true,
             'list-group-item-action': true,
             'text-white': id === currentChannelId,
@@ -30,14 +47,21 @@ class ChannelsBlock extends React.Component {
             'bg-dark': true,
           });
           return (
-            <a
-              key={id}
-              href={name}
-              className={aClasses}
-              onClick={this.chooseChannel(id)}
-            >
-              <div className="mr-auto">{name}</div>
-            </a>
+            <div key={id}>
+              <a
+                href={name}
+                className={aClasses}
+                onClick={this.chooseChannel(id)}
+              >
+                <div className="mr-auto">
+                  {name}
+                </div>
+                { removable
+                  ? <FontAwesomeIcon icon="cog" spin onClick={this.editChannel(id, name)} />
+                  : null
+                }
+              </a>
+            </div>
           );
         })}
       </div>

@@ -12,10 +12,14 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
 import reducers from './reducers';
 import App from './components/App';
 import * as actions from './actions';
 import UserNameContext from './context';
+
+library.add(faCog);
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -42,6 +46,12 @@ socket.on('newMessage', (res) => {
 });
 socket.on('newChannel', (res) => {
   store.dispatch(actions.addChannelSuccess(res.data));
+});
+socket.on('removeChannel', (res) => {
+  store.dispatch(actions.deleteChannelSuccess(res.data));
+});
+socket.on('renameChannel', (res) => {
+  store.dispatch(actions.editChannelSuccess(res.data));
 });
 
 render(

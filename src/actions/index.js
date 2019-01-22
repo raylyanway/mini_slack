@@ -40,6 +40,43 @@ export const addChannel = channel => async (dispatch) => {
   }
 };
 
+export const deleteChannelRequest = createAction('CHANNEL_DELETE_REQUEST');
+export const deleteChannelSuccess = createAction('CHANNEL_DELETE_SUCCESS');
+export const deleteChannelFailure = createAction('CHANNEL_DELETE_FAILURE');
+
+export const deleteChannel = channelId => async (dispatch) => {
+  dispatch(deleteChannelRequest());
+  try {
+    await axios.delete(
+      routes.deleteChannel(channelId),
+    );
+  } catch (e) {
+    dispatch(deleteChannelFailure());
+    // eslint-disable-next-line no-console
+    console.log(e);
+    throw new Error('Deleting channel failed!');
+  }
+};
+
+export const editChannelRequest = createAction('CHANNEL_EDIT_REQUEST');
+export const editChannelSuccess = createAction('CHANNEL_EDIT_SUCCESS');
+export const editChannelFailure = createAction('CHANNEL_EDIT_FAILURE');
+
+export const editChannel = channel => async (dispatch) => {
+  dispatch(editChannelRequest());
+  try {
+    await axios.patch(
+      routes.editChannel(channel.channelId),
+      { data: channel },
+    );
+  } catch (e) {
+    dispatch(editChannelFailure());
+    // eslint-disable-next-line no-console
+    console.log(e);
+    throw new Error('Editing channel failed!');
+  }
+};
+
 export const chooseChannel = createAction('CHANNEL_CHOOSE');
 
 export const modalOpen = createAction('MODAL_OPEN');

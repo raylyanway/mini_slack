@@ -18,6 +18,11 @@ class NewChannelForm extends React.Component {
         modalShow: true,
         headerTitle: 'Error',
         body: e.message,
+        footerDeleteButton: false,
+        footerTrueDeleteButton: false,
+        footerEditButton: false,
+        channelId: null,
+        channelName: null,
       });
       // eslint-disable-next-line no-console
       console.log(e);

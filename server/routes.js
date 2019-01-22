@@ -17,6 +17,11 @@ export default (router, io) => {
       modalShow: false,
       body: '',
       headerTitle: '',
+      footerDeleteButton: false,
+      footerTrueDeleteButton: false,
+      footerEditButton: false,
+      channelId: null,
+      channelName: null,
     },
   };
 
