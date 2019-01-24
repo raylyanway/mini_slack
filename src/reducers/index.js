@@ -14,16 +14,6 @@ const messages = handleActions({
   },
 }, {});
 
-const messagesIds = handleActions({
-  [actions.addMessageSuccess](state, { payload: { id } }) {
-    return [...state, id];
-  },
-  [actions.deleteChannelSuccess](state, { payload: { deletedMessagesIds } }) {
-    const newState = state.filter(m => !deletedMessagesIds.find(d => m === d));
-    return [...newState];
-  },
-}, []);
-
 const channels = handleActions({
   [actions.addChannelSuccess](state, { payload: { attributes, id } }) {
     return { ...state, [id]: attributes };
@@ -36,16 +26,6 @@ const channels = handleActions({
     return { ...state, [id]: { ...state[id], name } };
   },
 }, {});
-
-const channelsIds = handleActions({
-  [actions.addChannelSuccess](state, { payload: { id } }) {
-    return [...state, id];
-  },
-  [actions.deleteChannelSuccess](state, { payload: { id } }) {
-    const newState = state.filter(c => c !== id);
-    return [...newState];
-  },
-}, []);
 
 const currentChannelId = handleActions({
   [actions.chooseChannel](state, { payload }) {
@@ -97,16 +77,9 @@ const modal = handleActions({
 }, {});
 
 export default combineReducers({
-  entities: combineReducers({
-    channels,
-    messages,
-    modal,
-  }),
-  result: combineReducers({
-    channels: channelsIds,
-    messages: messagesIds,
-    currentChannelId,
-    modal: () => 1,
-  }),
+  channels,
+  messages,
+  currentChannelId,
+  modal,
   form: formReducer,
 });

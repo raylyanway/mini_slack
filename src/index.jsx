@@ -14,7 +14,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
-import { normalize, schema } from 'normalizr';
+import { keyBy } from 'lodash';
 import reducers from './reducers';
 import App from './components/App';
 import * as actions from './actions';
@@ -26,16 +26,11 @@ if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
 
-const channel = new schema.Entity('channels');
-const message = new schema.Entity('messages');
-const modal = new schema.Entity('modal');
-const mySchema = {
-  channels: [channel],
-  messages: [message],
-  modal,
-};
-const normalizedData = normalize(gon, mySchema);
-const initState = state => ({ ...state });
+const initState = state => ({
+  ...state,
+  channels: keyBy(state.channels, 'id'),
+  messages: keyBy(state.messages, 'id'),
+});
 
 let userName = Cookies.get('userName');
 
@@ -46,7 +41,7 @@ if (userName === undefined) {
 
 const store = createStore(
   reducers,
-  initState(normalizedData),
+  initState(gon),
   compose(composeWithDevTools(applyMiddleware(thunk))),
 );
 

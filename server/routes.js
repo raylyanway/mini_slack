@@ -14,7 +14,6 @@ export default (router, io) => {
     messages: [],
     currentChannelId: generalChannelId,
     modal: {
-      id: 1,
       modalShow: false,
       body: '',
       headerTitle: '',
@@ -55,17 +54,12 @@ export default (router, io) => {
     .delete('/channels/:id', (ctx) => {
       const channelId = Number(ctx.params.id);
       state.channels = state.channels.filter(c => c.id !== channelId);
-      const deletedMessagesIds = state.messages.reduce(
-        (acc, m) => (m.channelId === channelId ? [...acc, m.id] : acc),
-        [],
-      );
       state.messages = state.messages.filter(m => m.channelId !== channelId);
       ctx.status = 204;
       const data = {
         data: {
           type: 'channels',
           id: channelId,
-          deletedMessagesIds,
         },
       };
       io.emit('removeChannel', data);
@@ -73,7 +67,6 @@ export default (router, io) => {
     .patch('/channels/:id', (ctx) => {
       const channelId = Number(ctx.params.id);
       const channel = state.channels.find(c => c.id === channelId);
-
       const { attributes } = ctx.request.body.data;
       channel.name = attributes.name;
       ctx.status = 204;
