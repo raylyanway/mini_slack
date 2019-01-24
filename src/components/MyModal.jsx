@@ -1,32 +1,46 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Modal, Button } from 'react-bootstrap';
-import { UseModal } from '../connects';
+import { modalSelector } from '../selectors';
+import connect from '../connect';
 
-@UseModal
+const mapStateToProps = state => ({
+  modal: modalSelector(state),
+});
+
+@connect(mapStateToProps)
 @reduxForm({
-  form: 'editChannel',
+  form: 'editChannelForm',
 })
 class MyModal extends React.Component {
+  componentDidUpdate(prevProps) {
+    const {
+      initialize,
+      modal: {
+        channelName,
+        modalShow,
+      },
+    } = this.props;
+    if (modalShow !== prevProps.modal.modalShow) {
+      initialize({ channelName });
+    }
+  }
+
   renderFooter = () => {
     const {
-      modal: {
-        footerDeleteButton,
-        footerTrueDeleteButton,
-        footerEditButton,
-      },
+      modal: { type },
       submitting,
     } = this.props;
     return (
       <Modal.Footer>
-        { footerTrueDeleteButton
-          ? <Button className="mr-auto" onClick={this.channelTrueDelete}>Delete channel forever</Button>
+        { type === 'delete'
+          ? <Button className="mr-auto btn btn-danger" onClick={this.channelTrueDelete}>Delete channel forever</Button>
           : null }
-        { footerDeleteButton
-          ? <Button className="mr-auto" onClick={this.channelDelete}>Delete</Button>
+        { type === 'edit'
+          ? <Button className="mr-auto btn btn-warning" onClick={this.channelDelete}>Delete</Button>
           : null }
-        { footerEditButton
-          ? <Button type="submit" disabled={submitting}>Edit</Button>
+        { type === 'edit'
+          ? <Button className="btn btn-success" type="submit" disabled={submitting}>Edit</Button>
           : null }
         <Button onClick={this.modalClose}>Close</Button>
       </Modal.Footer>
@@ -34,9 +48,9 @@ class MyModal extends React.Component {
   }
 
   renderBody = () => {
-    const { modal: { body, footerEditButton, channelName }, submitting } = this.props;
+    const { modal: { body, type }, submitting } = this.props;
 
-    if (!footerEditButton) {
+    if (!type || type === 'delete') {
       return (
         <Modal.Body>
           <p>{body}</p>
@@ -46,14 +60,13 @@ class MyModal extends React.Component {
     return (
       <Modal.Body>
         <Field
-          name="text"
+          name="channelName"
           disabled={submitting}
           required
           component="input"
           type="text"
           className="form-control"
           autoComplete="off"
-          value={channelName}
         />
       </Modal.Body>
     );
@@ -77,21 +90,13 @@ class MyModal extends React.Component {
       await deleteChannel(channelId);
       this.modalClose();
     } catch (e) {
-      modalOpen({
-        modalShow: true,
-        headerTitle: 'Error',
-        body: e.message,
-        footerDeleteButton: false,
-        footerTrueDeleteButton: false,
-        footerEditButton: false,
-        channelId: null,
-      });
+      modalOpen({ body: e.message });
       // eslint-disable-next-line no-console
       console.log(e);
     }
   }
 
-  channelEdit = async ({ text }) => {
+  channelEdit = async ({ channelName }) => {
     const {
       modal: {
         channelId,
@@ -100,43 +105,26 @@ class MyModal extends React.Component {
       modalOpen,
       reset,
     } = this.props;
-    const channel = { channelId, attributes: { name: text } };
+    const channel = { channelId, attributes: { name: channelName } };
     try {
       await editChannel(channel);
-      reset();
       this.modalClose();
+      reset();
     } catch (e) {
-      modalOpen({
-        modalShow: true,
-        headerTitle: 'Error',
-        body: e.message,
-        footerDeleteButton: false,
-        footerTrueDeleteButton: false,
-        footerEditButton: false,
-        channelId: null,
-        channelName: null,
-      });
+      modalOpen({ body: e.message });
       // eslint-disable-next-line no-console
       console.log(e);
     }
   }
 
   channelDelete = () => {
-    const { modalOpen, modal: { channelId, channelName } } = this.props;
-
-    modalOpen({
-      modalShow: true,
-      headerTitle: 'Attention !!',
-      body: `Are you sure you want to delete ${channelName} channel?`,
-      footerDeleteButton: false,
-      footerTrueDeleteButton: true,
-      channelId,
-    });
+    const { modalDelete } = this.props;
+    modalDelete();
   }
 
   modalClose = () => {
     const { modalClose } = this.props;
-    modalClose(false);
+    modalClose();
   }
 
   render() {

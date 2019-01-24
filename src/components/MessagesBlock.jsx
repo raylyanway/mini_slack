@@ -2,9 +2,14 @@ import React from 'react';
 import StayScrolled from 'react-stay-scrolled';
 import cn from 'classnames';
 import NewMessageForm from './NewMessageForm';
-import { UseMessages } from '../connects';
+import { messagesSelector } from '../selectors';
+import connect from '../connect';
 
-@UseMessages
+const mapStateToProps = state => ({
+  messages: messagesSelector(state),
+});
+
+@connect(mapStateToProps)
 class MessagesBlock extends React.Component {
   componentDidUpdate(prevProps) {
     const { messages } = this.props;

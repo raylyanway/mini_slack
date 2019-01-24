@@ -79,5 +79,7 @@ export const editChannel = channel => async (dispatch) => {
 
 export const chooseChannel = createAction('CHANNEL_CHOOSE');
 
+export const modalEdit = createAction('MODAL_EDIT');
+export const modalDelete = createAction('MODAL_DELETE');
 export const modalOpen = createAction('MODAL_OPEN');
 export const modalClose = createAction('MODAL_CLOSE');

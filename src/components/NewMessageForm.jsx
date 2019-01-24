@@ -1,9 +1,14 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import UserNameContext from '../context';
-import { UseCurrentChannelId } from '../connects';
+import { currentChannelIdSelector } from '../selectors';
+import connect from '../connect';
 
-@UseCurrentChannelId
+const mapStateToProps = state => ({
+  currentChannelId: currentChannelIdSelector(state),
+});
+
+@connect(mapStateToProps)
 @reduxForm({
   form: 'newMessage',
 })
@@ -33,14 +38,8 @@ class NewMessageForm extends React.Component {
       reset();
     } catch (e) {
       modalOpen({
-        modalShow: true,
         headerTitle: 'Error',
         body: e.message,
-        footerDeleteButton: false,
-        footerTrueDeleteButton: false,
-        footerEditButton: false,
-        channelId: null,
-        channelName: null,
       });
       // eslint-disable-next-line no-console
       console.log(e);

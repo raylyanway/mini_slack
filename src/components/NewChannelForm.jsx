@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { UseOnlyActions } from '../connects';
+import connect from '../connect';
 
-@UseOnlyActions
+@connect(() => ({}))
 @reduxForm({
   form: 'newChannel',
 })
@@ -15,14 +15,8 @@ class NewChannelForm extends React.Component {
       reset();
     } catch (e) {
       modalOpen({
-        modalShow: true,
         headerTitle: 'Error',
         body: e.message,
-        footerDeleteButton: false,
-        footerTrueDeleteButton: false,
-        footerEditButton: false,
-        channelId: null,
-        channelName: null,
       });
       // eslint-disable-next-line no-console
       console.log(e);

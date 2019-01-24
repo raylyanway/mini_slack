@@ -2,10 +2,15 @@ import React from 'react';
 import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NewChannelForm from './NewChannelForm';
-import { UseCurrentChannelId, UseChannels } from '../connects';
+import { channelsSelector, currentChannelIdSelector } from '../selectors';
+import connect from '../connect';
 
-@UseChannels
-@UseCurrentChannelId
+const mapStateToProps = state => ({
+  channels: channelsSelector(state),
+  currentChannelId: currentChannelIdSelector(state),
+});
+
+@connect(mapStateToProps)
 class ChannelsBlock extends React.Component {
   chooseChannel = id => (e) => {
     e.preventDefault();
@@ -14,14 +19,8 @@ class ChannelsBlock extends React.Component {
   }
 
   editChannel = (id, name) => () => {
-    const { modalOpen } = this.props;
-    modalOpen({
-      modalShow: true,
-      headerTitle: 'Edit channel',
-      body: 'Edition',
-      footerDeleteButton: true,
-      footerTrueDeleteButton: false,
-      footerEditButton: true,
+    const { modalEdit } = this.props;
+    modalEdit({
       channelId: id,
       channelName: name,
     });
