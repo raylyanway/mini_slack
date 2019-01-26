@@ -55,9 +55,15 @@ class ChannelsBlock extends React.Component {
                 <div className="mr-auto">
                   {name}
                 </div>
-                { removable
-                  ? <FontAwesomeIcon icon="cog" spin onClick={this.editChannel(id, name)} />
-                  : null
+                {
+                  removable
+                  && (
+                    <FontAwesomeIcon
+                      icon="cog"
+                      spin
+                      onClick={this.editChannel(id, name)}
+                    />
+                  )
                 }
               </a>
             </div>
