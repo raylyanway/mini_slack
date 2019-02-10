@@ -5,4 +5,10 @@
 
 Minified version of chat
 
+## install
+`npm install`
+
+## start
+`make start`
+
 [demo](https://peaceful-crag-49755.herokuapp.com/)
