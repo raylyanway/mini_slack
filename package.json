@@ -93,7 +93,7 @@
     "file-loader": "^3.0.1",
     "flow-bin": "^0.89.0",
     "flow-typed": "^2.5.1",
-    "jest": "^25.4.0",
+    "jest": "26.0.1",
     "jest-cli": "^23.6.0",
     "nodemon": "^1.18.9",
     "webpack": "4.43.0"
