@@ -94,7 +94,7 @@
     "flow-bin": "^0.89.0",
     "flow-typed": "^2.5.1",
     "jest": "26.0.1",
-    "jest-cli": "^23.6.0",
+    "jest-cli": "26.0.1",
     "nodemon": "^1.18.9",
     "webpack": "4.43.0"
   }
